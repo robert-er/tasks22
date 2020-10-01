@@ -20,9 +20,8 @@ public class TrelloController {
     private TrelloClient trelloClient;
 
     @RequestMapping(method = RequestMethod.GET, value = "getTrelloBoards")
-    public void getTrelloBoards() {
-        List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
-
+    public List<TrelloBoardDto> getTrelloBoards() {
+        return trelloClient.getTrelloBoards();
         //Exercise 22.2: display lists only with not null name and id and name contains word 'Kodilla'
 //        trelloBoards
 //                .stream().filter(trelloBoardDto -> trelloBoardDto.getId()!=null
@@ -30,12 +29,12 @@ public class TrelloController {
 //                                && trelloBoardDto.getName().contains("Kodilla"))
 //                .forEach(trelloBoardDto -> System.out.println(trelloBoardDto.getId() + " " + trelloBoardDto.getName()));
 
-        trelloBoards.forEach(trelloBoardDto -> {
-            System.out.println(trelloBoardDto.getName() + " - " + trelloBoardDto.getId());
-            System.out.println("This board contains lists: ");
-            trelloBoardDto.getLists().forEach(trelloList ->
-                    System.out.println(trelloList.getName() + " - " + trelloList.getId() + " - " + trelloList.isClosed()));
-        });
+//        trelloBoards.forEach(trelloBoardDto -> {
+//            System.out.println(trelloBoardDto.getName() + " - " + trelloBoardDto.getId());
+//            System.out.println("This board contains lists: ");
+//            trelloBoardDto.getLists().forEach(trelloList ->
+//                    System.out.println(trelloList.getName() + " - " + trelloList.getId() + " - " + trelloList.isClosed()));
+//        });
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "createTrelloCard")
