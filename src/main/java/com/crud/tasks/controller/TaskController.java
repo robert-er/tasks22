@@ -3,7 +3,7 @@ package com.crud.tasks.controller;
 import com.crud.tasks.domain.TaskDto;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.DbService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 
@@ -11,26 +11,18 @@ import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/task")
 public class TaskController {
 
-    @Autowired
-    private TaskMapper taskMapper;
-    @Autowired
-    private DbService service;
+    private final TaskMapper taskMapper;
+    private final DbService service;
 
     @RequestMapping(method = RequestMethod.GET, value = "getTasks")
     public List<TaskDto> getTasks() {
         return taskMapper.mapToTaskDtoList(service.getAllTasks());
     }
 
-    // version from exercise 19.2
-//    @RequestMapping(method = RequestMethod.GET, value = "getTask/{id}")
-//    public TaskDto getTask(@PathVariable("id") Long taskId) throws TaskNotFoundException {
-//      return taskMapper.mapToTaskDto(service.getTask(taskId).orElseThrow(TaskNotFoundException::new));
-//    }
-
-    // version from course 19.3
     @RequestMapping(method = RequestMethod.GET, value = "getTask")
     public TaskDto getTask(@RequestParam Long taskId) throws TaskNotFoundException {
       return taskMapper.mapToTaskDto(service.getTask(taskId).orElseThrow(TaskNotFoundException::new));
