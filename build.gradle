@@ -34,10 +34,12 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-jdbc:2.1.8.RELEASE')
 
 	testImplementation('org.junit.jupiter:junit-jupiter-api')
-	testRuntime('org.junit.jupiter:junit-jupiter-engine')
+	testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
 
 	implementation('io.springfox:springfox-swagger2:2.7.0')
 	implementation('io.springfox:springfox-swagger-ui:2.7.0')
+
+	implementation('org.springframework.boot:spring-boot-starter-mail:2.3.4.RELEASE')
 }
 
 test {
