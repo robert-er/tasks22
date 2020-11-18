@@ -21,7 +21,6 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class TrelloFacade {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TrelloFacade.class);
     private final TrelloService trelloService;
     private final TrelloMapper trelloMapper;
     private final TrelloValidator trelloValidator;

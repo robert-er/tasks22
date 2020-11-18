@@ -4,11 +4,13 @@ import com.crud.tasks.domain.TrelloBoard;
 import com.crud.tasks.domain.TrelloCard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Component
 public class TrelloValidator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrelloValidator.class);
