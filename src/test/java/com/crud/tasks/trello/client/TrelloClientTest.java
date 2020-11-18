@@ -1,11 +1,11 @@
 package com.crud.tasks.trello.client;
 
 import com.crud.tasks.config.TrelloConfig;
-import com.crud.tasks.domain.CreatedTrelloCard;
+import com.crud.tasks.dto.CreatedTrelloCardDto;
 import com.crud.tasks.domain.TrelloBadges;
-import com.crud.tasks.domain.TrelloBoardDto;
+import com.crud.tasks.dto.TrelloBoardDto;
 
-import com.crud.tasks.domain.TrelloCardDto;
+import com.crud.tasks.dto.TrelloCardDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,17 +83,17 @@ public class TrelloClientTest {
                 .encode()
                 .toUri();
 
-        CreatedTrelloCard createdTrelloCard = new CreatedTrelloCard(
+        CreatedTrelloCardDto createdTrelloCardDto = new CreatedTrelloCardDto(
                 "1",
                 "Test task",
                 "http://test.com",
                 new TrelloBadges()
         );
 
-        when(restTemplate.postForObject(uri, null, CreatedTrelloCard.class)).thenReturn(createdTrelloCard);
+        when(restTemplate.postForObject(uri, null, CreatedTrelloCardDto.class)).thenReturn(createdTrelloCardDto);
 
         //When
-        CreatedTrelloCard newCard = trelloClient.createNewCard(trelloCardDto);
+        CreatedTrelloCardDto newCard = trelloClient.createNewCard(trelloCardDto);
 
         //Then
         Assertions.assertEquals("1", newCard.getId());

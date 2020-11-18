@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class TrelloTrello {
 
     private int board;
-    private  int card;
-
+    private int card;
 }

@@ -11,5 +11,4 @@ public class TrelloBadges {
 
     private int votes;
     private TrelloAttachmentsByType attachmentsByType;
-
 }
