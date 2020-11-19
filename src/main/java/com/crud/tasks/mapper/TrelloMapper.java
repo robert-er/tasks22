@@ -31,16 +31,11 @@ public class TrelloMapper {
                 .collect(toList());
     }
 
-    public List<TrelloList> mapToList(final List<TrelloListDto> trelloListDto) {
-        return trelloListDto.stream()
-                .map(trelloList -> new TrelloList(trelloList.getId(), trelloList.getName(), trelloList.isClosed()))
-                .collect(toList());
-    }
-
-    public List<TrelloListDto> mapToListDto(final List<TrelloList> trelloLists) {
-        return trelloLists.stream()
-                .map(trelloList -> new TrelloListDto(trelloList.getId(), trelloList.getName(), trelloList.isClosed()))
-                .collect(toList());
+    public TrelloCard mapToCard(final TrelloCardDto trelloCardDto) {
+        return new TrelloCard(trelloCardDto.getName(),
+                trelloCardDto.getDescription(),
+                trelloCardDto.getPos(),
+                trelloCardDto.getListId());
     }
 
     public TrelloCardDto mapToCardDto(final TrelloCard trelloCard) {
@@ -50,10 +45,15 @@ public class TrelloMapper {
                 trelloCard.getListId());
     }
 
-    public TrelloCard mapToCard(final TrelloCardDto trelloCardDto) {
-        return new TrelloCard(trelloCardDto.getName(),
-                trelloCardDto.getDescription(),
-                trelloCardDto.getPos(),
-                trelloCardDto.getListId());
+    private List<TrelloList> mapToList(final List<TrelloListDto> trelloListDto) {
+        return trelloListDto.stream()
+                .map(trelloList -> new TrelloList(trelloList.getId(), trelloList.getName(), trelloList.isClosed()))
+                .collect(toList());
+    }
+
+    private List<TrelloListDto> mapToListDto(final List<TrelloList> trelloLists) {
+        return trelloLists.stream()
+                .map(trelloList -> new TrelloListDto(trelloList.getId(), trelloList.getName(), trelloList.isClosed()))
+                .collect(toList());
     }
 }

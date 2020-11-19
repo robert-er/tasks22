@@ -33,5 +33,4 @@ public class TrelloService {
                 "New card: " + card.getName() + " has been created on you Trello account")));
         return newCard;
     }
-
 }
