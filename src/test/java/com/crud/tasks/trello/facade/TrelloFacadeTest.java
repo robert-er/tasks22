@@ -1,8 +1,12 @@
 package com.crud.tasks.trello.facade;
 
+import com.crud.tasks.domain.TrelloBadges;
 import com.crud.tasks.domain.TrelloBoard;
+import com.crud.tasks.domain.TrelloCard;
 import com.crud.tasks.domain.TrelloList;
+import com.crud.tasks.dto.CreatedTrelloCardDto;
 import com.crud.tasks.dto.TrelloBoardDto;
+import com.crud.tasks.dto.TrelloCardDto;
 import com.crud.tasks.dto.TrelloListDto;
 import com.crud.tasks.mapper.TrelloMapper;
 import com.crud.tasks.service.TrelloService;
@@ -17,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
@@ -93,9 +98,27 @@ class TrelloFacadeTest {
             trelloBoardDto.getLists().forEach(trelloListDto -> {
                 assertEquals("1", trelloListDto.getId());
                 assertEquals("my_list", trelloListDto.getName());
-                assertEquals(false, trelloListDto.isClosed());
+                assertFalse(trelloListDto.isClosed());
             });
         });
     }
 
+    @Test
+    public void shouldCreateCard() {
+        //Given
+        TrelloCardDto trelloCardDto = new TrelloCardDto("card_name", "card_description",
+                "pos", "listId");
+        TrelloCard trelloCard = new TrelloCard("card_name", "card_description",
+                "pos", "listId");
+        CreatedTrelloCardDto createdTrelloCardDtoMock = new CreatedTrelloCardDto("1", "name",
+                "shortUrl", new TrelloBadges());
+        when(trelloMapper.mapToCard(trelloCardDto)).thenReturn(trelloCard);
+        when(trelloService.createTrelloCard(any())).thenReturn(createdTrelloCardDtoMock);
+        //When
+        CreatedTrelloCardDto createdTrelloCardDto = trelloFacade.createCard(trelloCardDto);
+        //Then
+        assertEquals("1", createdTrelloCardDto.getId());
+        assertEquals("name", createdTrelloCardDto.getName());
+        assertEquals("shortUrl", createdTrelloCardDto.getShortUrl());
+    }
 }
