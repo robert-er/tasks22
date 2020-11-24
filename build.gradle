@@ -17,8 +17,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-//	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
@@ -28,8 +26,11 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.14'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.14'
 
-	implementation 'mysql:mysql-connector-java'
-//	implementation 'org.postgresql:postgresql'
+	//for localhost use
+//	implementation 'mysql:mysql-connector-java'
+
+	//for Heroku use
+	implementation 'org.postgresql:postgresql'
 
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.1.8.RELEASE'
 
