@@ -15,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableScheduling
 @EnableSwagger2
 @Configuration
-public class CoreConfiguration implements WebMvcConfigurer {
+public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
     public RestTemplate restTemplate() {
