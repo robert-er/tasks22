@@ -1,6 +1,9 @@
 package com.crud.tasks.controller;
 
+import com.crud.tasks.domain.Task;
 import com.crud.tasks.dto.TaskDto;
+import com.crud.tasks.mapper.TaskMapper;
+import com.crud.tasks.service.DbService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,14 +12,17 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.util.NestedServletException;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,14 +34,22 @@ class TaskControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private DbService service;
+
+    @Autowired
+    private TaskMapper taskMapper;
+
     @Test
-    public void shouldReturnNestedServletExceptionWhenGetTasksWithWrongParameterGiven() throws Exception {
-        mockMvc.perform(get("/v1/task/getTasks")).andDo(print()).andExpect(status().isOk());
+    public void shouldReturnListWhenGetTasksPerformed() throws Exception {
+        mockMvc.perform(get("/v1/task/getTasks"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"1452445", "2456875", "3454542203"})
-    public void shouldGetTask(String id) {
+    public void shouldReturnNestedServletExceptionWhenGetTask(String id) {
         Assertions.assertThrows(NestedServletException.class, () -> {
             mockMvc.perform(get("/v1/task/getTask")
                     .param("taskId", id))
@@ -50,21 +64,22 @@ class TaskControllerTest {
     @ParameterizedTest
     @ValueSource(strings = {"1452445", "2456875", "3454542203"})
     public void shouldDeleteTask(String id) throws Exception {
-        Assertions.assertThrows(NestedServletException.class, () -> {
-            mockMvc.perform(delete("/v1/task/deleteTask")
-                    .param("taskId", id))
-                    .andDo(print())
-                    .andExpect(status().isInternalServerError())
-                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof TaskNotFoundException))
-                    .andExpect(result -> assertEquals("Task not found",
-                            Objects.requireNonNull(result.getResolvedException()).getMessage()));
-        });
+        when(service.getTask(Long.parseLong(id)))
+                .thenReturn(Optional.of(new Task(Long.parseLong(id), "test", "test")));
+
+        mockMvc.perform(delete("/v1/task/deleteTask")
+                .param("taskId", id))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
     public void shouldUpdateTask() throws Exception {
+        TaskDto taskDto = new TaskDto(2L, "updatedOfTheTask", "updatedOfTheTask");
+        when(service.saveTask(taskMapper.mapToTask(taskDto))).thenReturn(taskMapper.mapToTask(taskDto));
+
         mockMvc.perform(put("/v1/task/updateTask")
-                .content(asJsonString(new TaskDto(2L, "updatedOfTheTask", "updatedOfTheTask")))
+                .content(asJsonString(taskDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -75,8 +90,11 @@ class TaskControllerTest {
 
     @Test
     public void shouldCreateTask() throws Exception {
+        TaskDto taskDto = new TaskDto(2L, "titleOfTheTask", "contentOfTheTask");
+        when(service.saveTask(taskMapper.mapToTask(taskDto))).thenReturn(taskMapper.mapToTask(taskDto));
+
         mockMvc.perform(post("/v1/task/createTask")
-                .content(asJsonString(new TaskDto(2L, "titleOfTheTask", "contentOfTheTask")))
+                .content(asJsonString(taskDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
