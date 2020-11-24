@@ -28,8 +28,8 @@ public class TaskController {
       return taskMapper.mapToTaskDto(service.getTask(taskId).orElseThrow(TaskNotFoundException::new));
     }
 
-    @DeleteMapping
-    public void deleteTask(@RequestParam Long taskId) throws TaskNotFoundException {
+    @DeleteMapping("{taskId}")
+    public void deleteTask(@PathVariable Long taskId) throws TaskNotFoundException {
             service.deleteTask(taskId);
     }
 
