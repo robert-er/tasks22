@@ -27,7 +27,7 @@ Java 8
 Gradle 6.4.1
 ```
 
-##Documentation
+## Documentation
 
 API endpoints are documented using Swagger [./swagger-ui.html#/](http://rocky-sands-77117.herokuapp.com/swagger-ui.html#/)
 
