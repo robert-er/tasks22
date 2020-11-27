@@ -2,6 +2,7 @@ package com.crud.tasks.controller;
 
 import com.crud.tasks.domain.Task;
 import com.crud.tasks.dto.TaskDto;
+import com.crud.tasks.exception.TaskNotFoundException;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.DbService;
 import com.fasterxml.jackson.databind.ObjectMapper;

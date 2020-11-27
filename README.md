@@ -27,6 +27,49 @@ Java 8
 Gradle 6.4.1
 ```
 
+#### Run at localhost
+
+To start application on localhost, small changes are necessary. Need to setup your local database.
+
+##### How to change database?
+
+In file `src/main/resources/application.properties` there is a section `#HEROKU CONFIGURATION WITH POSTGRES`. 
+You should put it under comments and add your localhost database configuration. 
+For testing purposes I used MySQL version 8.0.21 local database, but you can use any database you have installed locally.
+In my case, application.properties for local MySQL use looks like:
+
+##### application.properties
+```properties
+# LOCAL DATABASE MYSQL CONFIGURATION
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database=mysql
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+spring.datasource.url=jdbc:mysql://localhost:3306/task_crud?serverTimezone=Europe/Warsaw&useSSL=false&allowPublicKeyRetrieval=true
+spring.datasource.username=robert
+spring.datasource.password=robertpassword
+
+#HEROKU CONFIGURATION WITH POSTGRES
+#spring.jpa.hibernate.ddl-auto=update
+#spring.jpa.database=postgresql
+#spring.datasource.url=${JDBC_DATABASE_URL}
+#spring.datasource.username=${JDBC_DATABASE_USERNAME}
+#spring.datasource.password=${JDBC_DATABASE_PASSWORD}
+```
+
+Also need to change database dependencies in `build.gradle`: comment PostgreSQL dependency and uncomment MySQL dependency like below.
+
+##### build.gradle
+```java
+dependencies {
+    (...)
+	//for localhost use
+	implementation 'mysql:mysql-connector-java'
+
+	//for Heroku use
+        //	implementation 'org.postgresql:postgresql'
+    (...)
+``` 
+
 ## Documentation
 
 API endpoints are documented using Swagger [./swagger-ui.html#/](http://rocky-sands-77117.herokuapp.com/swagger-ui.html#/)
