@@ -44,7 +44,8 @@ In my case, application.properties for local MySQL use looks like:
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.database=mysql
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
-spring.datasource.url=jdbc:mysql://localhost:3306/task_crud?serverTimezone=Europe/Warsaw&useSSL=false&allowPublicKeyRetrieval=true
+spring.datasource.url=jdbc:mysql://localhost:3306/task_crud?\
+  serverTimezone=Europe/Warsaw&useSSL=false&allowPublicKeyRetrieval=true
 spring.datasource.username=robert
 spring.datasource.password=robertpassword
 
