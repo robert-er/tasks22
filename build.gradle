@@ -26,10 +26,10 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.14'
 
 	//for localhost use
-//	implementation 'mysql:mysql-connector-java'
+	implementation 'mysql:mysql-connector-java'
 
 	//for Heroku use
-	implementation 'org.postgresql:postgresql'
+//	implementation 'org.postgresql:postgresql'
 
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.1.8.RELEASE'
 
@@ -44,6 +44,8 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.6'
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	implementation 'org.thymeleaf:thymeleaf:3.0.11.RELEASE'
 }
 
 test {

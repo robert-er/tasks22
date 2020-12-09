@@ -20,7 +20,7 @@ class DbServiceTest {
     @Test
     public void shouldGetAllTasks() throws TaskNotFoundException {
         //Given
-        Task task1 = new Task(1L, "task_name", "task_description");
+        Task task1 = new Task(1L, "task_nameZZZ", "task_descriptionZZZ");
         Task savedTask1 = service.saveTask(task1);
 
         Task task2 = new Task(2L, "task_name2", "task_description2");

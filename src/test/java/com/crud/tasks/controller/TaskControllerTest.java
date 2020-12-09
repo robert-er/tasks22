@@ -6,7 +6,6 @@ import com.crud.tasks.exception.TaskNotFoundException;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.DbService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -43,7 +42,7 @@ class TaskControllerTest {
 
     @Test
     public void shouldReturnListWhenGetTasksPerformed() throws Exception {
-        mockMvc.perform(get("/v1/task/getTasks"))
+        mockMvc.perform(get("/v1/task"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -51,10 +50,8 @@ class TaskControllerTest {
     @ParameterizedTest
     @ValueSource(strings = {"1452445", "2456875", "3454542203"})
     public void shouldReturnNestedServletExceptionWhenGetTask(String id) {
-        Assertions.assertThrows(NestedServletException.class, () -> {
-            mockMvc.perform(get("/v1/task/getTask")
-                    .param("taskId", id))
-                    .andDo(print())
+        assertThrows(NestedServletException.class, () -> {
+            mockMvc.perform(get("/v1/task/{id}", id))
                     .andExpect(status().isInternalServerError())
                     .andExpect(result -> assertTrue(result.getResolvedException() instanceof TaskNotFoundException))
                     .andExpect(result -> assertEquals("Task not found",
@@ -68,9 +65,7 @@ class TaskControllerTest {
         when(service.getTask(Long.parseLong(id)))
                 .thenReturn(Optional.of(new Task(Long.parseLong(id), "test", "test")));
 
-        mockMvc.perform(delete("/v1/task/deleteTask")
-                .param("taskId", id))
-                .andDo(print())
+        mockMvc.perform(delete("/v1/task/{id}", id))
                 .andExpect(status().isOk());
     }
 
@@ -79,7 +74,7 @@ class TaskControllerTest {
         TaskDto taskDto = new TaskDto(2L, "updatedOfTheTask", "updatedOfTheTask");
         when(service.saveTask(taskMapper.mapToTask(taskDto))).thenReturn(taskMapper.mapToTask(taskDto));
 
-        mockMvc.perform(put("/v1/task/updateTask")
+        mockMvc.perform(put("/v1/task")
                 .content(asJsonString(taskDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -94,7 +89,7 @@ class TaskControllerTest {
         TaskDto taskDto = new TaskDto(2L, "titleOfTheTask", "contentOfTheTask");
         when(service.saveTask(taskMapper.mapToTask(taskDto))).thenReturn(taskMapper.mapToTask(taskDto));
 
-        mockMvc.perform(post("/v1/task/createTask")
+        mockMvc.perform(post("/v1/task")
                 .content(asJsonString(taskDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
