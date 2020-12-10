@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class MailCreatorService {
 
@@ -17,17 +20,35 @@ public class MailCreatorService {
     @Autowired
     private AdminConfig adminConfig;
 
-    public String buildTrelloCardEmail(String message) {
-        Context context = new Context();
-        context.setVariable("message", message);
-        context.setVariable("tasks_url", "http://localhost:8080/crud");
-        context.setVariable("button", "Visit website");
-        context.setVariable("admin_name", adminConfig.getAdminName());
-        context.setVariable("company_name", adminConfig.getCompanyName());
-        context.setVariable("company_goal", adminConfig.getCompanyGoal());
-        context.setVariable("app_name", adminConfig.getAppName());
-        context.setVariable("app_description", adminConfig.getAppDescription());
-        context.setVariable("app_version", adminConfig.getAppVersion());
+    private final Context context = new Context();
+    private final List<String> functionality = Arrays.asList(
+            "You can manage your tasks",
+            "Provides connection with Trello account",
+            "Application allows sending tasks to Trello"
+    );
+
+    public String buildTrelloCardEmail(String message, String shortUrl) {
+        boolean containsUrl = false;
+        if(!shortUrl.isEmpty()) {
+            containsUrl = true;
+            context.setVariable("tasks_url", shortUrl);
+        }
+        context.setVariable("show_button", containsUrl);
+        context.setVariable("button", "check task on Trello");
+        prepareContext(message);
         return templateEngine.process("/mail/created-trello-card-mail", context);
+    }
+
+    public String buildStatusEmail(String message) {
+        prepareContext(message);
+        return templateEngine.process("/mail/status-mail", context);
+    }
+
+    private void prepareContext(String message) {
+        context.setVariable("show_button", false);
+        context.setVariable("message", message);
+        context.setVariable("is_friend", false);
+        context.setVariable("admin_config", adminConfig);
+        context.setVariable("application_functionality", functionality);
     }
 }
