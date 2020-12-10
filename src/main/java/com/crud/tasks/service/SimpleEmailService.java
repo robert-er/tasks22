@@ -22,6 +22,16 @@ public class SimpleEmailService {
     @Autowired
     private MailCreatorService mailCreatorService;
 
+    public void send(final Mail mail, String shortUrl) {
+        LOGGER.info("Starting email preparation ...");
+        try {
+            javaMailSender.send(createMimeMessage(mail, shortUrl));
+            LOGGER.info("email has been sent.");
+        } catch (MailException e) {
+            LOGGER.error("Failed to process email sending. ", e.getMessage(), e);
+        }
+    }
+
     public void send(final Mail mail) {
         LOGGER.info("Starting email preparation ...");
         try {
@@ -32,12 +42,24 @@ public class SimpleEmailService {
         }
     }
 
+    private MimeMessagePreparator createMimeMessage(final Mail mail, String shortUrl) {
+        return mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper.setTo(mail.getMailTo());
+            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage(), shortUrl), true);
+            if (mail.getToCC() != null) {
+                messageHelper.setCc(mail.getToCC());
+            }
+        };
+    }
+
     private MimeMessagePreparator createMimeMessage(final Mail mail) {
         return mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(mail.getMailTo());
             messageHelper.setSubject(mail.getSubject());
-            messageHelper.setText(mailCreatorService.buildTrelloCardEmail(mail.getMessage()), true);
+            messageHelper.setText(mailCreatorService.buildStatusEmail(mail.getMessage()), true);
             if (mail.getToCC() != null) {
                 messageHelper.setCc(mail.getToCC());
             }
