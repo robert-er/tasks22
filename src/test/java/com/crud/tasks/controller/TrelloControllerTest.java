@@ -41,12 +41,12 @@ class TrelloControllerTest {
     //tests from exercise 29.2
     @Test
     public void shouldGetTrelloBoards() throws Exception {
-        mockMvc.perform(get("/v1/trello")).andDo(print()).andExpect(status().isOk());
+        mockMvc.perform(get("/v1/trello/boards")).andDo(print()).andExpect(status().isOk());
     }
 
     @Test
     public void shouldCreateTrelloCard() throws Exception {
-        mockMvc.perform(post("/v1/trello")
+        mockMvc.perform(post("/v1/trello/cards")
                 .content(asJsonString(new TrelloCardDto("cardName", "cardDescr",
                         "top", "5f50aa25fec549759452fd29")))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +73,7 @@ class TrelloControllerTest {
         List<TrelloBoardDto> trelloBoards = new ArrayList<>();
         when(trelloFacade.fetchTrelloBoards()).thenReturn(trelloBoards);
         //When & Then
-        mockMvc.perform(get("/v1/trello").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/v1/trello/boards").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -89,7 +89,7 @@ class TrelloControllerTest {
 
         when(trelloFacade.fetchTrelloBoards()).thenReturn(trelloBoards);
         //When & Then
-        mockMvc.perform(get("/v1/trello").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/v1/trello/boards").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200))
                 //trello board fields
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -115,7 +115,7 @@ class TrelloControllerTest {
         String jsonContent = gson.toJson(trelloCardDto);
 
         //When & Then
-        mockMvc.perform(post("/v1/trello")
+        mockMvc.perform(post("/v1/trello/cards")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
                 .content(jsonContent))
