@@ -42,7 +42,7 @@ class TaskControllerTest {
 
     @Test
     public void shouldReturnListWhenGetTasksPerformed() throws Exception {
-        mockMvc.perform(get("/v1/task"))
+        mockMvc.perform(get("/v1/tasks"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -51,7 +51,7 @@ class TaskControllerTest {
     @ValueSource(strings = {"1452445", "2456875", "3454542203"})
     public void shouldReturnNestedServletExceptionWhenGetTask(String id) {
         assertThrows(NestedServletException.class, () -> {
-            mockMvc.perform(get("/v1/task/{id}", id))
+            mockMvc.perform(get("/v1/tasks/{id}", id))
                     .andExpect(status().isInternalServerError())
                     .andExpect(result -> assertTrue(result.getResolvedException() instanceof TaskNotFoundException))
                     .andExpect(result -> assertEquals("Task not found",
@@ -65,7 +65,7 @@ class TaskControllerTest {
         when(service.getTask(Long.parseLong(id)))
                 .thenReturn(Optional.of(new Task(Long.parseLong(id), "test", "test")));
 
-        mockMvc.perform(delete("/v1/task/{id}", id))
+        mockMvc.perform(delete("/v1/tasks/{id}", id))
                 .andExpect(status().isOk());
     }
 
@@ -74,7 +74,7 @@ class TaskControllerTest {
         TaskDto taskDto = new TaskDto(2L, "updatedOfTheTask", "updatedOfTheTask");
         when(service.saveTask(taskMapper.mapToTask(taskDto))).thenReturn(taskMapper.mapToTask(taskDto));
 
-        mockMvc.perform(put("/v1/task")
+        mockMvc.perform(put("/v1/tasks")
                 .content(asJsonString(taskDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -89,7 +89,7 @@ class TaskControllerTest {
         TaskDto taskDto = new TaskDto(2L, "titleOfTheTask", "contentOfTheTask");
         when(service.saveTask(taskMapper.mapToTask(taskDto))).thenReturn(taskMapper.mapToTask(taskDto));
 
-        mockMvc.perform(post("/v1/task")
+        mockMvc.perform(post("/v1/tasks")
                 .content(asJsonString(taskDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
