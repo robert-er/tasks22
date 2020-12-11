@@ -4,8 +4,14 @@ Kodilla Tasks application is a training application implemented during the cours
 
 Tasks is java web application with using REST API. It can store tasks database. It can communicate with Trello boards via API endpoints.
 
+## Used technologies
+`JAVA` `SPRING BOOT` `HIBERNATE` `REST API` `CRUD` `LOMBOK` `JDBC` `MYSQL` `POSTGRESQL` `SWAGGER` `ACTUATOR` `THYMELEAF`
+ `JUNIT` `MOCKITO` `TRELLO API` `HEROKU` `GITHUB PAGES` `HTML` `CSS` `JQUERY`
+
 ## Demo
-Backend is working on Heroku. Frontend is uploaded under: [https://robert-er.github.io/](https://robert-er.github.io/)
+Backend is working on Heroku. Frontend is uploaded under: [https://robert-er.github.io/](https://robert-er.github.io/).
+
+Frontend github: [https://github.com/robert-er/robert-er.github.io](https://github.com/robert-er/robert-er.github.io).
 
 ## Features
 Possible to store tasks in Heroku Postgresql database. 
@@ -14,7 +20,8 @@ Functions:
 - read tasks from database
 - edit task
 - delete task
-- mailing service: app send email periodically to my address with number of tasks stored in the database.
+- mailing service: app send email periodically to my address with number of tasks stored in the database. 
+  Once Trello card is created, the mail with confirmation is sent. Mails have separate mail html templates based on Thymeleaf.
 
 Possible to send a task as a card to one of my Trello boards. Possible to read Trello boards and lists on my Trello account to select place where card will be saved.
 
@@ -29,7 +36,7 @@ Gradle 6.4.1
 
 #### Run at localhost
 
-To start application on localhost, small changes are necessary. Need to setup your local database.
+To start application on localhost, small changes are necessary. Need to set up your local database.
 
 ##### How to change database?
 
